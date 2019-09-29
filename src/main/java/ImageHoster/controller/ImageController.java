@@ -93,7 +93,7 @@ public class ImageController {
     //adding the error message to show to user if he/she tries to edit other user image
     //loggedUser will be used to get user details of the user who has logged in
     //ImageUser will be used to get the information of the user who has posted the image
-    //if the person is same than control go to images/edit.htm else to images/iamge.html
+    //if the person is same than control go to images/edit.htm else to images/image.html
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
     public String editImage(@RequestParam("imageId") Integer imageId, Model model,HttpSession session) {
@@ -155,12 +155,32 @@ public class ImageController {
 
 
     //This controller method is called when the request pattern is of type 'deleteImage' and also the incoming request is of DELETE type
-    //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
-    //Looks for a controller method with request mapping of type '/images'
+    //loggedUser will be used to get user details of the user who has logged in
+    //details of the image are get using imageService
+    //ImageUser will be used to get the information of the user who has posted the image
+    //if the person is same than the method calls the deleteImage() method in the business logic passing the id of the image to be deleted
+    //and Looks for a controller method with request mapping of type '/images'
+    //else the error message is set and model attributes are added
+    //and than controlls goes for images/image.html and error message is shown to user
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,Model model,HttpSession session) {
+
+        User loggedUser = (User) session.getAttribute("loggeduser");
+
+        Image image = imageService.getImage(imageId);
+        User imageUser = image.getUser();
+
+        if (imageUser.getId() == loggedUser.getId()) {
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }else{
+            String error = "Only the owner of the image can delete the image";
+            model.addAttribute("image", image);
+            model.addAttribute("tags",image.getTags());
+            model.addAttribute("deleteError",error);
+            return "images/image";
+        }
+
     }
 
 
