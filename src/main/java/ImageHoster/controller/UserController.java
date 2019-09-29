@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -38,12 +41,57 @@ public class UserController {
     }
 
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
-    //This method calls the business logic and after the user record is persisted in the database, directs to login page
+    //firstly the password is get from user using getPassword method
+    //than patteren is created for special character, UppeCase alphabet,lowerCase alphabet ,digit
+    //than three falgs are set to false initially
+    //the password is first checked if it's null or not
+    //if the password is not null than pattern are  matched
+    // firstly for special charcter , than for presence for upper or lower letter,and than for special charcater
+    //if all the flags are true than method calls the business logic and after the user record is persisted in the database, directs to login page
+    //else sets the user profile with UserProfile type object
+    //And adds User type object to a model and returns 'users/registration.html' file
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
-        userService.registerUser(user);
-        return "redirect:/users/login";
+    public String registerUser(User user, Model model) {
+
+        String password=user.getPassword();
+
+        Pattern specailCharPatten = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+        Pattern UpperCasePatten = Pattern.compile("[A-Z ]");
+        Pattern lowerCasePatten = Pattern.compile("[a-z ]");
+        Pattern digitCasePatten = Pattern.compile("[0-9 ]");
+
+        boolean flag1 = false;
+        boolean flag2 = false;
+        boolean flag3 = false;
+
+        if(password!=null) {
+
+            if (specailCharPatten.matcher(password).find()) {
+                flag1 = true;
+            }
+            if (UpperCasePatten.matcher(password).find() || lowerCasePatten.matcher(password).find()) {
+                flag2 = true;
+            }
+            if (digitCasePatten.matcher(password).find()) {
+                flag3 = true;
+            }
+        }
+
+        if (flag1 && flag2 && flag3) {
+            userService.registerUser(user);
+            return "users/login";
+
+        } else {
+            String error = "Password must contain at least 1 alphabet, 1 number & 1 special character";
+            model.addAttribute("passwordTypeError", error);
+            User user1 = new User();
+            UserProfile profile = new UserProfile();
+            user1.setProfile(profile);
+            model.addAttribute("User", user1);
+            return "users/registration";
+        }
     }
+
 
     //This controller method is called when the request pattern is of type 'users/login'
     @RequestMapping("users/login")
