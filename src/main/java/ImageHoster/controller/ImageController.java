@@ -90,19 +90,34 @@ public class ImageController {
 
     //This controller method is called when the request pattern is of type 'editImage'
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
-    //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
-
-    //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
+    //adding the error message to show to user if he/she tries to edit other user image
+    //loggedUser will be used to get user details of the user who has logged in
+    //ImageUser will be used to get the information of the user who has posted the image
+    //if the person is same than control go to images/edit.htm else to images/iamge.html
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model,HttpSession session) {
         Image image = imageService.getImage(imageId);
 
-        String tags = convertTagsToString(image.getTags());
         model.addAttribute("image", image);
-        model.addAttribute("tags", tags);
-        return "images/edit";
+
+        String error = "Only the owner of the image can edit the image";
+
+        User loggedUser = (User) session.getAttribute("loggeduser");
+        User imageUser = image.getUser();
+
+        if(imageUser.getId() == loggedUser.getId()){
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("tags", tags);
+            return "images/edit";
+        }else{
+            model.addAttribute("tags",image.getTags());
+            model.addAttribute("editError",error);
+            return "images/image";
+        }
+
     }
+
 
     //This controller method is called when the request pattern is of type 'images/edit' and also the incoming request is of PUT type
     //The method receives the imageFile, imageId, updated image, along with the Http Session
