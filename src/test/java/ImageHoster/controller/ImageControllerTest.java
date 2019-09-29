@@ -1,6 +1,7 @@
 /*
 package ImageHoster.controller;
 
+import ImageHoster.controller.ImageController;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
@@ -95,6 +96,7 @@ public class ImageControllerTest {
     }
 
 
+
     //This test checks the controller logic when the logged in user sends a GET request to the server to get the form to upload an image in the application and checks whether the logic returns the html file 'images/upload.html'
     @Test
     public void uploadImageWithGetRequest() throws Exception {
@@ -149,6 +151,8 @@ public class ImageControllerTest {
                 .session(session))
                 .andExpect(redirectedUrl("/images"));
     }
+
+
 
     //This test checks the controller logic when the owner of the image sends the GET request to get the form to edit the image and checks whether the logic returns the html file 'images/edit.html'
     @Test
@@ -309,5 +313,4 @@ public class ImageControllerTest {
                 .andExpect(model().attribute("deleteError", "Only the owner of the image can delete the image"));
     }
 }
-
 */
