@@ -1,8 +1,10 @@
 package ImageHoster.controller;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
+import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Controller
@@ -53,6 +58,10 @@ public class ImageController {
 
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+
+        // used to add comment that need to be shown to the user
+        model.addAttribute("comments",image.getiComments());
+
         return "images/image";
     }
 
@@ -113,6 +122,8 @@ public class ImageController {
         }else{
             model.addAttribute("tags",image.getTags());
             model.addAttribute("editError",error);
+            //adding comments to model attribute
+            model.addAttribute("comments",image.getiComments());
             return "images/image";
         }
 
@@ -178,6 +189,8 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags",image.getTags());
             model.addAttribute("deleteError",error);
+            //adding comments to model attribute
+            model.addAttribute("comments",image.getiComments());
             return "images/image";
         }
 
@@ -225,4 +238,7 @@ public class ImageController {
 
         return tagString.toString();
     }
+
+
+
 }
