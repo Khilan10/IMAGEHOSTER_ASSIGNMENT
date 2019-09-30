@@ -52,19 +52,19 @@
 
         <!--<h5 class="f4 mb0 underline">Comments</h5>-->
         <!-- A form to upload a comment to a particular image-->
-        <!--<form method="POST" enctype="multipart/form-data"
-              th:action="'/image/'+ ${image.id} + '/' + ${image.title} + '/comments'">
-            <fieldset id="sign_up" class="ba b&#45;&#45;transparent ph0 mh0">
-                <div class="mt3">
-                    <label class="db fw6 lh-copy f6" for="comment">Write a comment</label>
-                    <textarea class="pa2 input-reset ba w-100" rows="5" name="comment" id="comment"></textarea>
-                </div>
-            </fieldset>
-            <div>
-                <input class="b ph3 pv2 input-reset ba b&#45;&#45;black bg-transparent grow pointer f6 dib" type="submit"
-                       value="Submit">
+        <form method="POST" enctype="multipart/form-data"
+                      th:action="'/image/'+ ${image.id} + '/' + ${image.title} + '/comments'">
+        <fieldset id="sign_up" class="ba b--transparent ph0 mh0">
+            <div class="mt3">
+                <label class="db fw6 lh-copy f6" for="comment">Write a comment</label>
+                <textarea class="pa2 input-reset ba w-100" rows="5" name="comment" id="comment"></textarea>
             </div>
-        </form>-->
+        </fieldset>
+        <div>
+            <input class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit"
+                   value="Submit">
+        </div>
+    </form>
 
          A piece of code displaying all the comments to a particular image
         <div class="comments mt5">
