@@ -113,6 +113,8 @@ public class ImageController {
         }else{
             model.addAttribute("tags",image.getTags());
             model.addAttribute("editError",error);
+            //adding comments to model attribute
+            model.addAttribute("comments",image.getiComments());
             return "images/image";
         }
 
@@ -178,6 +180,8 @@ public class ImageController {
             model.addAttribute("image", image);
             model.addAttribute("tags",image.getTags());
             model.addAttribute("deleteError",error);
+            //adding comments to model attribute
+            model.addAttribute("comments",image.getiComments());
             return "images/image";
         }
 
