@@ -53,10 +53,10 @@ public class UserController {
 
         String password=user.getPassword();
 
-        Pattern specailCharPatten = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
-        Pattern UpperCasePatten = Pattern.compile("[A-Z ]");
-        Pattern lowerCasePatten = Pattern.compile("[a-z ]");
-        Pattern digitCasePatten = Pattern.compile("[0-9 ]");
+        Pattern specailCharPatten = Pattern.compile("[^a-z0-9]", Pattern.CASE_INSENSITIVE);
+        Pattern UpperCasePatten = Pattern.compile("[A-Z]");
+        Pattern lowerCasePatten = Pattern.compile("[a-z]");
+        Pattern digitCasePatten = Pattern.compile("[0-9]");
 
         boolean flag1 = false;
         boolean flag2 = false;
